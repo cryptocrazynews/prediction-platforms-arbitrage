@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Type roles (loaded via <link> in layout; system fallbacks if offline) */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Floodlit-pitch terminal palette */
+  --bg: #0a0f0d;
+  --panel: #101714;
+  --panel-2: #16201b;
+  --line: #233029;
+  --text: #e8f0ea;
+  --chalk: #f4f9f5;
+  --muted: #7e9488;
+  --signal: #2be08a; /* edge / guaranteed */
+  --amber: #f2b53c; /* partial coverage / caution */
+  --danger: #ff6b6b; /* no edge / negative */
+  --gold: #d8b65e; /* trophy accent, used sparingly */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(43, 224, 138, 0.06), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.tabnum {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+/* --- Signature: the arbitrage "ticket" --- */
+.arb-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+.arb-card.guaranteed {
+  border-color: color-mix(in oklab, var(--signal) 45%, var(--line));
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--signal) 18%, transparent),
+    0 18px 40px -24px rgba(43, 224, 138, 0.5);
+}
+.arb-card.partial {
+  border-color: color-mix(in oklab, var(--amber) 40%, var(--line));
+}
+.arb-card .scan {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(43, 224, 138, 0.07), transparent);
+  transform: translateX(-100%);
+  animation: scan 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes scan {
+  0%,
+  60% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.edge-figure {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+/* stake-split bar */
+.split {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+.split > span {
+  display: block;
+  height: 100%;
+}
+
+/* odds board */
+.board {
+  width: 100%;
+  border-collapse: collapse;
+}
+.board th,
+.board td {
+  padding: 9px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.board th:first-child,
+.board td:first-child {
+  text-align: left;
+}
+.board thead th {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.board tbody tr:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+.cell-best {
+  color: var(--signal);
+  font-weight: 600;
+}
+.cell-empty {
+  color: color-mix(in oklab, var(--muted) 55%, transparent);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  font-size: 11px;
+  color: var(--muted);
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--muted);
+}
+.dot.ok {
+  background: var(--signal);
+}
+.dot.bad {
+  background: var(--danger);
+}
+
+a {
+  color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arb-card .scan {
+    animation: none;
+    display: none;
+  }
+}
