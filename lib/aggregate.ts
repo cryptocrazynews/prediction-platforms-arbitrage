@@ -11,7 +11,7 @@ import type { CanonicalMarket, MarketsPayload, Quote } from './types';
 import { TOURNAMENT, CACHE_TTL_SECONDS, env } from './config';
 import { fetchPolymarketWinner } from './adapters/polymarket';
 import { fetchKalshiWinner } from './adapters/kalshi';
-import { fetchOddsApiWinner } from './adapters/oddsapi';
+// import { fetchOddsApiWinner } from './adapters/oddsapi'; // disabled (needs API key)
 import { mockWinnerQuotes, mockMatchMarkets } from './adapters/mock';
 import { buildWinnerMarket, mergeMatchMarkets } from './normalize/group';
 import { findArbs } from './arbitrage/engine';
@@ -33,7 +33,9 @@ interface NamedAdapter {
 const WINNER_ADAPTERS: NamedAdapter[] = [
   { source: 'polymarket', label: 'Polymarket', run: fetchPolymarketWinner },
   { source: 'kalshi', label: 'Kalshi', run: fetchKalshiWinner },
-  { source: 'theoddsapi', label: 'Sportsbooks (The Odds API)', run: fetchOddsApiWinner },
+  // The Odds API (sportsbooks) is disabled because it requires an API key.
+  // To re-enable: add ODDS_API_KEY in env and uncomment the line below.
+  // { source: 'theoddsapi', label: 'Sportsbooks (The Odds API)', run: fetchOddsApiWinner },
 ];
 
 async function runAdapters(): Promise<{
