@@ -88,9 +88,9 @@ export default function Page() {
         >
           <span className="dot" style={{ background: 'var(--amber)', marginTop: 6 }} />
           <p className="text-[13px] leading-relaxed" style={{ color: 'var(--amber)' }}>
-            <strong>展示資料(非即時)。</strong> 目前三個即時來源都連不上,以下顯示的是內建範例資料,
+            <strong>展示資料(非即時)。</strong> 目前即時來源都連不上,以下顯示的是內建範例資料,
             這些「套利機會」是為了示範而設計的數字,<strong>不是真實市場的可下注機會</strong>。
-            接上至少一個即時來源(例如設定 The Odds API 金鑰)後,這條訊息會自動消失。
+            接上任一即時來源後,這條訊息會自動消失。
           </p>
         </div>
       )}
