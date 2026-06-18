@@ -8,6 +8,16 @@ function backQuotes(q: Quote[]): Quote[] {
 }
 
 export function MarketBoard({ market }: { market: CanonicalMarket }) {
+  // Outright winner can list ~48 teams, most parked at the price floor. Show
+  // only the top outcomes (already sorted favourites-first) to keep it useful.
+  const MAX_ROWS = 20;
+  const isWinner = market.type === 'outright_winner';
+  const visibleOutcomes =
+    isWinner && market.outcomeIds.length > MAX_ROWS
+      ? market.outcomeIds.slice(0, MAX_ROWS)
+      : market.outcomeIds;
+  const hiddenCount = market.outcomeIds.length - visibleOutcomes.length;
+
   // Collect the back-quoting sources present anywhere in this market.
   const sourceOrder: { source: string; label: string }[] = [];
   const seen = new Set<string>();
@@ -42,7 +52,7 @@ export function MarketBoard({ market }: { market: CanonicalMarket }) {
           </tr>
         </thead>
         <tbody>
-          {market.outcomeIds.map((oid) => {
+          {visibleOutcomes.map((oid) => {
             const backs = backQuotes(market.quotesByOutcome[oid] ?? []);
             const bySource = new Map<string, Quote>();
             for (const q of backs) {
@@ -78,6 +88,11 @@ export function MarketBoard({ market }: { market: CanonicalMarket }) {
           })}
         </tbody>
       </table>
+      {hiddenCount > 0 && (
+        <div className="px-4 py-2.5 text-[11.5px] text-muted">
+          + {hiddenCount} more longshots hidden (parked near the price floor)
+        </div>
+      )}
     </div>
   );
 }

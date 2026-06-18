@@ -34,6 +34,10 @@ export default function Page() {
   const guaranteed = arbs.filter((a) => a.fullCoverage);
   const partial = arbs.filter((a) => !a.fullCoverage);
 
+  // Demo mode = the mock source is active and no live source returned data.
+  const liveOk = (data?.sourcesUsed ?? []).some((s) => s.source !== 'mock' && s.ok);
+  const isDemo = (data?.sourcesUsed ?? []).some((s) => s.source === 'mock' && s.ok) && !liveOk;
+
   return (
     <main className="mx-auto max-w-6xl px-5 py-8">
       {/* Header */}
@@ -72,6 +76,24 @@ export default function Page() {
           </span>
         )}
       </section>
+
+      {/* Demo-mode banner: live sources unreachable, showing sample data. */}
+      {isDemo && (
+        <div
+          className="panel p-4 mt-4 flex items-start gap-3"
+          style={{
+            borderColor: 'var(--amber)',
+            background: 'color-mix(in oklab, var(--amber) 8%, var(--panel))',
+          }}
+        >
+          <span className="dot" style={{ background: 'var(--amber)', marginTop: 6 }} />
+          <p className="text-[13px] leading-relaxed" style={{ color: 'var(--amber)' }}>
+            <strong>展示資料(非即時)。</strong> 目前三個即時來源都連不上,以下顯示的是內建範例資料,
+            這些「套利機會」是為了示範而設計的數字,<strong>不是真實市場的可下注機會</strong>。
+            接上至少一個即時來源(例如設定 The Odds API 金鑰)後,這條訊息會自動消失。
+          </p>
+        </div>
+      )}
 
       {error && (
         <div className="panel p-4 mt-5" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }}>

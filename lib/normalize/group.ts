@@ -19,7 +19,7 @@ export function buildWinnerMarket(quotes: Quote[]): CanonicalMarket | null {
   const outcomeIds = Object.keys(quotesByOutcome).sort((a, b) => {
     const pa = bestBackProb(quotesByOutcome[a]);
     const pb = bestBackProb(quotesByOutcome[b]);
-    return pa - pb;
+    return pb - pa; // favourites (highest implied probability) first
   });
   return {
     key: WC_WINNER_KEY,
